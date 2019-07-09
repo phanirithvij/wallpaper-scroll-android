@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        android:layout_height="match_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent" >
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="545dp" android:layout_alignParentBottom="true"
+            android:layout_marginBottom="0dp">
+        <ImageView
+                android:id="@+id/image_view"
+                android:layout_width="match_parent"
+                android:layout_height="411dp"
+                android:src="@drawable/ic_launcher_foreground"
+                android:contentDescription="@string/todo">
+        </ImageView>
+
+        <TextView
+                android:id="@+id/text_view"
+                android:layout_width="match_parent"
+                android:text="@string/dummy_content"
+                android:textSize="30sp"
+                android:gravity="center"
+                android:layout_height="132dp"/>
+
+    </LinearLayout>
+</RelativeLayout>
