@@ -27,11 +27,19 @@ class HomePagesAdapter(
         layoutInflater = LayoutInflater.from(context)
         val view = layoutInflater.inflate(R.layout.page, container, false)
         val imageView = view.findViewById<ImageView>(R.id.image_view)
-        Glide
-            .with(context)
-            .load(pageModels[position].icon)
-            .thumbnail(0.1f)
-            .into(imageView)
+        if (pageModels[position].url != null){
+            Glide
+                .with(context)
+                .load(pageModels[position].url)
+                .thumbnail(0.1f)
+                .into(imageView)
+        } else {
+            Glide
+                .with(context)
+                .load(pageModels[position].icon)
+                .thumbnail(0.1f)
+                .into(imageView)
+        }
         val textView = view.findViewById<TextView>(R.id.text_view)
         textView.text = pageModels[position].label
         container.addView(view, 0)

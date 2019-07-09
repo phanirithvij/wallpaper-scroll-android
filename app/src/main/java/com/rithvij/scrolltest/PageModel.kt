@@ -1,11 +1,5 @@
 package com.rithvij.scrolltest
 
-import android.graphics.drawable.Drawable
+class PageModel(var label: String, var icon: Int, var url: String?)
 
-//class PageModel(var apps: List<AppModel>) {
-//
-//}
-
-class PageModel(var label: String, var icon: Int) {
-
-}
+class JsonPageModel(var label: String, var icon: String, var url: String?)
