@@ -1,5 +1,6 @@
 package com.rithvij.scrolltest
 
+import android.annotation.TargetApi
 import android.os.Build
 import android.os.Bundle
 import android.graphics.Color
@@ -52,6 +53,7 @@ class MainActivity : AppCompatActivity() {
 //                https://bit.ly/32gnXsh
                 override fun onPageScrollStateChanged(state: Int) {}
 
+                @TargetApi(Build.VERSION_CODES.ECLAIR)
                 override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
                     val xOffset = (position + positionOffset) / (pageModels.size - 1)
 //                    println(xOffset)

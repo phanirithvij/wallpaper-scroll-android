@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
+import androidx.viewpager.widget.PagerAdapter
 
 class HomePagesAdapter(
     private var pageModels: List<PageModel>,
