@@ -21,6 +21,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.rithvij.scrolltest.utils.loadJSONFromAsset
 import com.rithvij.scrolltest.utils.convertFileToContentUri
 
+const val EXTERNAL_ST_PERMISSION = 2423
+
 class MainActivity : AppCompatActivity() {
 
     private var currentPage: Int = 0
@@ -33,17 +35,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            // Permission is not granted
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                2343
-            )
-        }
 
         wallpaperManager = WallpaperManager.getInstance(applicationContext)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -78,6 +69,7 @@ class MainActivity : AppCompatActivity() {
         viewPager.adapter = adapter
 
         dock.setOnClickListener {
+            requestPermissions()
             val path = filesDir.absolutePath
             println(path)
             try {
@@ -144,6 +136,19 @@ class MainActivity : AppCompatActivity() {
                     println("Current Item $currentItem")
                 }
             })
+        }
+    }
+
+    private fun requestPermissions(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Permission is not granted
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                EXTERNAL_ST_PERMISSION
+            )
         }
     }
 }
