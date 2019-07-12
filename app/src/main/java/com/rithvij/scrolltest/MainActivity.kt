@@ -1,6 +1,7 @@
 package com.rithvij.scrolltest
 
 import java.io.File
+import android.net.Uri
 import android.Manifest
 import android.os.Build
 import android.os.Bundle
@@ -17,7 +18,9 @@ import androidx.core.content.FileProvider
 import androidx.viewpager.widget.ViewPager
 import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AppCompatActivity
+import com.rithvij.scrolltest.utils.deleteImage
 import com.rithvij.scrolltest.utils.loadJSONFromAsset
+import com.rithvij.scrolltest.utils.getRealPathFromURI
 import com.rithvij.scrolltest.utils.convertFileToContentUri
 
 const val EXTERNAL_ST_PERMISSION = 2423
@@ -57,14 +60,11 @@ class MainActivity : AppCompatActivity() {
 //                https://stackoverflow.com/a/32038517/8608146
 //                val inputStream = resources.openRawResource(+ R.drawable.orange)
 
-                val tempFile : File = if (pageModels[currentPage].url == null){
-                    ImageProvider().createTempFile(applicationContext, pageModels[currentPage].resource!!)
-                } else {
-                    ImageProvider().createTempFile(applicationContext, pageModels[currentPage].url)
-                }
-
+                val tempFile : File? = ImageProvider(applicationContext, pageModels[currentPage]).getTempFile()
+                println(tempFile!!.path)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    val myIntent = wallpaperManager.getCropAndSetWallpaperIntent(convertFileToContentUri(applicationContext, tempFile))
+                    val content = convertFileToContentUri(applicationContext, tempFile)
+                    val myIntent = wallpaperManager.getCropAndSetWallpaperIntent(content)
 //                val myIntent = Intent(Intent.ACTION_VIEW)
                     myIntent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
                     val uri = FileProvider.getUriForFile(
@@ -74,6 +74,7 @@ class MainActivity : AppCompatActivity() {
                     )
                     myIntent.data = uri
                     startActivity(myIntent)
+                    cleanUpImage(content)
                 } else {
                     wallpaperManager.setBitmap(BitmapFactory.decodeFile(tempFile.path))
                 }
@@ -152,6 +153,15 @@ class MainActivity : AppCompatActivity() {
         } else {
             println("Shit it's null $data")
         }
+    }
+
+    private fun cleanUpImage(content: Uri){
+        // The images are being stored in Pictures/ directory
+        // Delete them right after we use them
+//        https://stackoverflow.com/a/3414749/8608146
+        val filepath = (getRealPathFromURI(applicationContext, content))
+        deleteImage(applicationContext, content.path!!)
+        deleteImage(applicationContext, filepath)
     }
 
     private fun requestPermissions(){
