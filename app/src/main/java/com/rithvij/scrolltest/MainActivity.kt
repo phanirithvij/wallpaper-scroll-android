@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
             try {
 //                https://stackoverflow.com/a/32038517/8608146
 //                val inputStream = resources.openRawResource(+ R.drawable.orange)
-                val inputStream = resources.openRawResource(+ pageModels[currentPage].icon)
+                val inputStream = resources.openRawResource(pageModels[currentPage].icon)
                 val tempFile = File.createTempFile("image", ".jpg")
                 copyFile(inputStream, FileOutputStream(tempFile))
 
