@@ -9,14 +9,13 @@ import com.google.gson.Gson
 import android.widget.Button
 import android.graphics.Color
 import android.content.Intent
-import java.io.FileOutputStream
 import android.app.WallpaperManager
+import android.graphics.BitmapFactory
 import androidx.core.app.ActivityCompat
 import android.content.pm.PackageManager
 import androidx.core.content.FileProvider
 import androidx.viewpager.widget.ViewPager
 import androidx.core.content.ContextCompat
-import com.rithvij.scrolltest.utils.copyFile
 import androidx.appcompat.app.AppCompatActivity
 import com.rithvij.scrolltest.utils.loadJSONFromAsset
 import com.rithvij.scrolltest.utils.convertFileToContentUri
@@ -41,25 +40,7 @@ class MainActivity : AppCompatActivity() {
             window.statusBarColor = Color.TRANSPARENT
         }
 
-        val data = loadJSONFromAsset(applicationContext, "data.json")
-        val gson = Gson()
-        pageModels = mutableListOf()
-
-        if (data != null) {
-            val listData = gson.fromJson(data, Array<JsonPageModel>::class.java)
-            pageModels.addAll(0, listData.map {
-                return@map PageModel(
-                    it.label,
-                    resources.getIdentifier(
-                        it.icon,
-                        "drawable",
-                        packageName
-                    ), it.url
-                )
-            })
-        } else {
-            println("Shit it's null $data")
-        }
+        loadJsonData()
 
         dock = findViewById(R.id.dock)
 //        dock.text = pageModels[0].label
@@ -75,30 +56,32 @@ class MainActivity : AppCompatActivity() {
             try {
 //                https://stackoverflow.com/a/32038517/8608146
 //                val inputStream = resources.openRawResource(+ R.drawable.orange)
-                val inputStream = resources.openRawResource(pageModels[currentPage].icon)
-                val tempFile = File.createTempFile("image", ".jpg")
-                copyFile(inputStream, FileOutputStream(tempFile))
 
-                println(tempFile.absolutePath)
-                val myIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    wallpaperManager.getCropAndSetWallpaperIntent(convertFileToContentUri(applicationContext, tempFile))
+                val tempFile : File = if (pageModels[currentPage].url == null){
+                    ImageProvider().createTempFile(applicationContext, pageModels[currentPage].resource!!)
                 } else {
-                    TODO("VERSION.SDK_INT < KITKAT")
+                    ImageProvider().createTempFile(applicationContext, pageModels[currentPage].url)
                 }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    val myIntent = wallpaperManager.getCropAndSetWallpaperIntent(convertFileToContentUri(applicationContext, tempFile))
 //                val myIntent = Intent(Intent.ACTION_VIEW)
-                myIntent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                val uri = FileProvider.getUriForFile(
-                    this@MainActivity,
-                    BuildConfig.APPLICATION_ID + ".provider",
-                    tempFile
-                )
-                myIntent.data = uri
-                startActivity(myIntent)
+                    myIntent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    val uri = FileProvider.getUriForFile(
+                        this@MainActivity,
+                        BuildConfig.APPLICATION_ID + ".provider",
+                        tempFile
+                    )
+                    myIntent.data = uri
+                    startActivity(myIntent)
+                } else {
+                    wallpaperManager.setBitmap(BitmapFactory.decodeFile(tempFile.path))
+                }
             } catch (e: IOException) {
                 throw RuntimeException("Can't create temp file ", e)
             }
 
-//            getUriFromResource(applicationContext, pageModels[currentPage].icon)
+//            getUriFromResource(applicationContext, pageModels[currentPage].resource)
 //            val file = File(obbDir, "y.png")
 //            val pathx = file.absolutePath // get absolute path
 //            println(pathx)
@@ -136,6 +119,38 @@ class MainActivity : AppCompatActivity() {
                     println("Current Item $currentItem")
                 }
             })
+        }
+    }
+
+    private fun loadJsonData(){
+        val data = loadJSONFromAsset(applicationContext, "data.json")
+        val gson = Gson()
+        pageModels = mutableListOf()
+
+        if (data != null) {
+            try {
+                val listData = gson.fromJson(data, Array<JsonPageModel>::class.java)
+                pageModels.addAll(0, listData.map {
+                    var icon : Int? = null
+                    if (it.resource != null){
+                        icon = resources.getIdentifier(
+                            it.resource,
+                            "drawable",
+                            packageName
+                        )
+                    }
+                    return@map PageModel(
+                        it.label,
+                        icon,
+                        it.url
+                    )
+                })
+            } catch (e: NullPointerException){
+                println("FUCK")
+                e.printStackTrace()
+            }
+        } else {
+            println("Shit it's null $data")
         }
     }
 

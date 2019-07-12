@@ -36,7 +36,7 @@ class HomePagesAdapter(
         } else {
             Glide
                 .with(context)
-                .load(pageModels[position].icon)
+                .load(pageModels[position].resource)
                 .thumbnail(0.1f)
                 .into(imageView)
         }

@@ -1,43 +1,42 @@
 [
-  {
-    "icon": "allanime",
-    "label": "Anime for Weebs"
-  },
-  {
-    "icon": "painterboy",
-    "label": "Painter Boy wazzup my man"
-  },
-  {
-    "icon": "space",
-    "label": "Space adventures"
-  },
-  {
-    "icon": "doctorstrange",
-    "label": "A spell for an eye"
-  },
-  {
-    "icon": "colors",
-    "label": "Colorful looking thing"
-  },
-  {
-    "icon": "green",
-    "label": "Hmmm those trees have green in 'em"
-  },
-  {
-    "icon": "orange",
-    "label": "Half dead clock looking thing"
-  },
-  {
-    "icon": "luffy",
-    "label": "I'm gonna be the king of the pirates"
-  },
-  {
-    "icon": "deadpoop",
-    "label": "I can grow my balls back unlike Wolverine"
-  },
-  {
-    "icon": "wires",
-    "label": "I can look at those all day",
-    "url": "https://i.imgur.com/tLYSHmL.jpg"
-  }
+    {
+        "resource": "allanime",
+        "label": "Anime for Weebs"
+    },
+    {
+        "resource": "painterboy",
+        "label": "Painter Boy wazzup my man"
+    },
+    {
+        "resource": "space",
+        "label": "Space adventures"
+    },
+    {
+        "resource": "doctorstrange",
+        "label": "A spell for an eye"
+    },
+    {
+        "resource": "colors",
+        "label": "Colorful looking thing"
+    },
+    {
+        "resource": "green",
+        "label": "Hmmm those trees have green in 'em"
+    },
+    {
+        "resource": "orange",
+        "label": "Half dead clock looking thing"
+    },
+    {
+        "resource": "luffy",
+        "label": "I'm gonna be the king of the pirates"
+    },
+    {
+        "resource": "deadpoop",
+        "label": "I can grow my balls back unlike Wolverine"
+    },
+    {
+        "label": "I can look at those all day",
+        "url": "https://i.imgur.com/tLYSHmL.jpg"
+    }
 ]
