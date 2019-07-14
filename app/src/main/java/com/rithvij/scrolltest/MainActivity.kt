@@ -1,28 +1,29 @@
 package com.rithvij.scrolltest
 
-import java.io.File
-import java.util.Date
-import android.net.Uri
 import android.Manifest
+import android.app.WallpaperManager
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import java.io.IOException
-import com.google.gson.Gson
 import android.widget.Button
-import android.graphics.Color
-import android.content.Intent
-import android.app.WallpaperManager
-import android.graphics.BitmapFactory
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.viewpager.widget.ViewPager
-import androidx.core.content.ContextCompat
-import androidx.appcompat.app.AppCompatActivity
-import com.rithvij.scrolltest.config.APPDir
+import com.google.gson.Gson
+import com.rithvij.scrolltest.config.DataDir
+import com.rithvij.scrolltest.models.JsonPageModel
+import com.rithvij.scrolltest.models.PageModel
 import com.rithvij.scrolltest.utils.*
-import com.rithvij.scrolltest.models.*
+import java.io.File
+import java.io.IOException
 import java.text.DateFormat
+import java.util.*
 
 const val EXTERNAL_ST_PERMISSION = 2423
 
@@ -104,7 +105,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadJsonData(){
 //        val data = loadAssetContent(applicationContext, "data.json")
-        val data = loadFileContent(applicationContext, "$APPDir/data/data.json")
+        val data = loadFileContent(applicationContext, "$DataDir/data.json")
         val format = DateFormat.getDateInstance()
         val ran = Date()
         val text = format.format(ran)

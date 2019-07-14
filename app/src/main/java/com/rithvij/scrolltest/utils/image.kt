@@ -1,12 +1,12 @@
 package com.rithvij.scrolltest.utils
 
-import java.io.File
-import android.net.Uri
-import android.util.Log
-import android.database.Cursor
 import android.content.Context
-import android.provider.MediaStore
+import android.database.Cursor
 import android.media.MediaScannerConnection
+import android.net.Uri
+import android.provider.MediaStore
+import android.util.Log
+import java.io.File
 
 fun getRealPathFromURI(context: Context, contentUri: Uri): String {
     var cursor: Cursor? = null

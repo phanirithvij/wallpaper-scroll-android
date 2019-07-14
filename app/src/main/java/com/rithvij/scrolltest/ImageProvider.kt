@@ -1,16 +1,16 @@
 package com.rithvij.scrolltest
 
-import java.io.File
-import android.util.Log
 import android.content.Context
 import android.os.AsyncTask
+import android.util.Log
 import android.util.TypedValue
-import java.io.FileOutputStream
 import com.bumptech.glide.Glide
-import com.google.common.io.Files
-import com.rithvij.scrolltest.utils.copyFile
 import com.bumptech.glide.request.FutureTarget
+import com.google.common.io.Files
 import com.rithvij.scrolltest.models.PageModel
+import com.rithvij.scrolltest.utils.copyFile
+import java.io.File
+import java.io.FileOutputStream
 
 interface AsyncResponse {
     fun processFinish(output: File?)

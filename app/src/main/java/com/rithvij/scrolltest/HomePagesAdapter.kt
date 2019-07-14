@@ -1,15 +1,15 @@
 package com.rithvij.scrolltest
 
+import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.content.Context
-import android.widget.TextView
-import com.bumptech.glide.Glide
 import android.widget.ImageView
-import android.view.LayoutInflater
+import android.widget.TextView
 import androidx.viewpager.widget.PagerAdapter
-import com.rithvij.scrolltest.models.PageModel
+import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.rithvij.scrolltest.models.PageModel
 
 class HomePagesAdapter(
     private var pageModels: List<PageModel>,
