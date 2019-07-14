@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadJsonData(){
+    private fun loadJsonData() {
 //        val data = loadAssetContent(applicationContext, "data.json")
         val data = loadFileContent(applicationContext, "$DataDir/data.json")
         val format = DateFormat.getDateInstance()
@@ -120,29 +120,42 @@ class MainActivity : AppCompatActivity() {
         try {
             val listData = gson.fromJson(data, Array<JsonPageModel>::class.java)
             pageModels.addAll(0, listData.map {
-                var icon : Int? = null
-                if (it.resource != null){
-                    icon = resources.getIdentifier(
-                        it.resource,
-                        "drawable",
-                        packageName
-                    )
+                var icon: Int? = null
+                when (it.type) {
+                    0 -> {
+//                        res
+                        icon = resources.getIdentifier(
+                            it.resource,
+                            "drawable",
+                            packageName
+                        )
+                    }
+                    1 -> {
+//                        url
+                    }
+                    2 -> {
+//                        file
+                    }
+                    else -> {
+                    }
                 }
 //                Toast.makeText(this, "${it.label}", Toast.LENGTH_SHORT).show()
-                appendLog("${it.resource} ${it.label} ${it.url}", "labels.txt", Logmode.Append)
+                appendLog("${it.resource} ${it.label} ${it.url} ${it.file} ${it.type}", "labels.txt", Logmode.Append)
                 return@map PageModel(
                     it.label,
+                    it.url,
+                    it.file,
                     icon,
-                    it.url
+                    it.type
                 )
             })
-        } catch (e: NullPointerException){
+        } catch (e: NullPointerException) {
             println("FUCK")
             e.printStackTrace()
         }
     }
 
-    private fun cleanUpImage(content: Uri){
+    private fun cleanUpImage(content: Uri) {
         // The images are being stored in Pictures/ directory
         // Delete them right after we use them
 //        https://stackoverflow.com/a/3414749/8608146
@@ -151,7 +164,7 @@ class MainActivity : AppCompatActivity() {
         deleteImage(applicationContext, filepath)
     }
 
-    private fun requestPermissions(){
+    private fun requestPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
             != PackageManager.PERMISSION_GRANTED
         ) {
@@ -168,10 +181,10 @@ class MainActivity : AppCompatActivity() {
 //                https://stackoverflow.com/a/32038517/8608146
 //                val inputStream = resources.openRawResource(+ R.drawable.orange)
 
-                val tempFile : File? = ImageProvider(applicationContext, pageModels[currentPage]).getTempFile()
-                println(tempFile!!.path)
+                val imageFile: File? = ImageProvider(applicationContext, pageModels[currentPage]).getImageFile()
+                println(imageFile!!.path)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    val content = convertFileToContentUri(applicationContext, tempFile)
+                    val content = convertFileToContentUri(applicationContext, imageFile)
                     val myIntent = wallpaperManager.getCropAndSetWallpaperIntent(content)
 //                val myIntent = Intent(Intent.ACTION_VIEW)
                     myIntent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
@@ -179,13 +192,13 @@ class MainActivity : AppCompatActivity() {
                         this@MainActivity,
 //                        BuildConfig.APPLICATION_ID + ".provider",
                         applicationContext.packageName + ".provider",
-                        tempFile
+                        imageFile
                     )
                     myIntent.data = uri
                     startActivity(myIntent)
                     cleanUpImage(content)
                 } else {
-                    wallpaperManager.setBitmap(BitmapFactory.decodeFile(tempFile.path))
+                    wallpaperManager.setBitmap(BitmapFactory.decodeFile(imageFile.path))
                 }
             } catch (e: IOException) {
                 throw RuntimeException("Can't create temp file ", e)

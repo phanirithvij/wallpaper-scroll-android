@@ -1,19 +1,23 @@
 [
     {
         "resource": "allanime",
-        "label": "Anime for Weebs"
+        "label": "Anime for Weebs",
+        "type" : 0
     },
     {
         "resource": "painterboy",
-        "label": "Painter Boy wazzup my man"
+        "label": "Painter Boy wazzup my man",
+        "type" : 0
     },
     {
         "resource": "space",
-        "label": "Space adventures"
+        "label": "Space adventures",
+        "type" : 0
     },
     {
         "resource": "doctorstrange",
-        "label": "A spell for an eye"
+        "label": "A spell for an eye",
+        "type" : 0
     },
     {
         "resource": "colors",
@@ -21,7 +25,8 @@
     },
     {
         "resource": "green",
-        "label": "Hmmm those trees have green in 'em"
+        "label": "Hmmm those trees have green in 'em",
+        "type" : 0
     },
     {
         "resource": "orange",
@@ -29,18 +34,32 @@
     },
     {
         "resource": "luffy",
-        "label": "I'm gonna be the king of the pirates"
+        "label": "I'm gonna be the king of the pirates",
+        "type" : 0
     },
     {
         "resource": "deadpoop",
-        "label": "I can grow my balls back unlike Wolverine"
+        "label": "I can grow my balls back unlike Wolverine",
+        "type" : 0
     },
     {
         "label": "I can look at those all day",
-        "url": "https://i.imgur.com/tLYSHmL.jpg"
+        "url": "https://i.imgur.com/tLYSHmL.jpg",
+        "type" : 1
     },
     {
         "label": "It is a 404",
-        "url": "https://i.imgur.com/jdiejofei.jpg"
+        "url": "https://i.imgur.com/jdiejofei.jpg",
+        "type" : 1
+    },
+    {
+        "label": "It is a File /sdcard/X.png",
+        "file": "sdcard/X.png",
+        "type" : 2
+    },
+    {
+        "label": "It is a File /sdcard/X.png",
+        "file": "sdcard/H.png",
+        "type" : 2
     }
 ]
