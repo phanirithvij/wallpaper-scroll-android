@@ -20,3 +20,11 @@ This doc contains the stuff I've learnt while making this wallpaper app
     - **Resources**:
         - [So post](https://stackoverflow.com/a/23826357/8608146)
         - [So post](https://stackoverflow.com/a/37507155/8608146)
+- Logging in release mode
+    - **Issue**: *title*
+    - **Solution**:
+
+        Write to a log file
+
+    - **Resources**:
+        - [So post](https://stackoverflow.com/a/6209739/8608146) to logfile

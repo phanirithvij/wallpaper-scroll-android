@@ -1,5 +1,5 @@
 package com.rithvij.scrolltest.utils
 
-enum class Mode {
-    Append
+enum class Logmode {
+    Append, Erase
 }

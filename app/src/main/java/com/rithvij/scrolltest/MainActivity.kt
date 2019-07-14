@@ -1,12 +1,12 @@
 package com.rithvij.scrolltest
 
 import java.io.File
+import java.util.Date
 import android.net.Uri
 import android.Manifest
 import android.os.Build
 import android.os.Bundle
 import java.io.IOException
-import android.widget.Toast
 import com.google.gson.Gson
 import android.widget.Button
 import android.graphics.Color
@@ -19,7 +19,6 @@ import androidx.core.content.FileProvider
 import androidx.viewpager.widget.ViewPager
 import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AppCompatActivity
-import kotlin.random.Random
 import com.rithvij.scrolltest.utils.*
 import com.rithvij.scrolltest.models.*
 
@@ -35,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var wallpaperManager: WallpaperManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        getAppDir()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -102,16 +102,17 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadJsonData(){
         val data = loadJSONFromAsset(applicationContext, "data.json")
-        Toast.makeText(this, "Help me ${data!!.length}", Toast.LENGTH_SHORT).show()
-        println(data)
-        val ran = Random(32)
-        appendLog(data, "data${ran.nextInt()}.json", Mode.Append)
+        val ran = Date().time
+        appendLog(data!!, "data-latest.json", Logmode.Erase)
+        appendLog(ran.toString(), "data-latest.json", Logmode.Append)
         val gson = Gson()
         pageModels = mutableListOf()
 
+//        println(filesDir)
+//        println(getExternalFilesDir("Data"))
+
         try {
             val listData = gson.fromJson(data, Array<JsonPageModel>::class.java)
-            Toast.makeText(this, "${listData.size}", Toast.LENGTH_SHORT).show()
             pageModels.addAll(0, listData.map {
                 var icon : Int? = null
                 if (it.resource != null){
@@ -122,7 +123,7 @@ class MainActivity : AppCompatActivity() {
                     )
                 }
 //                Toast.makeText(this, "${it.label}", Toast.LENGTH_SHORT).show()
-                appendLog("${it.resource} ${it.label} ${it.url}", "labels.txt", Mode.Append)
+                appendLog("${it.resource} ${it.label} ${it.url}", "labels.txt", Logmode.Append)
                 return@map PageModel(
                     it.label,
                     icon,

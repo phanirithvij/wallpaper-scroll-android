@@ -1,14 +1,15 @@
 package com.rithvij.scrolltest
 
-import android.content.Context
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.content.Context
 import android.widget.TextView
-import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
+import android.widget.ImageView
+import android.view.LayoutInflater
+import androidx.viewpager.widget.PagerAdapter
 import com.rithvij.scrolltest.models.PageModel
+import com.bumptech.glide.request.RequestOptions
 
 class HomePagesAdapter(
     private var pageModels: List<PageModel>,
@@ -28,11 +29,14 @@ class HomePagesAdapter(
         layoutInflater = LayoutInflater.from(context)
         val view = layoutInflater.inflate(R.layout.page, container, false)
         val imageView = view.findViewById<ImageView>(R.id.image_view)
-        if (pageModels[position].url != null){
+        if (pageModels[position].url != null) {
+            val requestOptions = RequestOptions()
+                .placeholder(R.drawable.animated_loader)
+                .error(R.drawable.im404)
             Glide
                 .with(context)
+                .applyDefaultRequestOptions(requestOptions)
                 .load(pageModels[position].url)
-                .thumbnail(0.1f)
                 .into(imageView)
         } else {
             Glide

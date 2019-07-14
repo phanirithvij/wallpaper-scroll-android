@@ -1,5 +1,7 @@
 package com.rithvij.scrolltest.utils
 
+import com.rithvij.scrolltest.config.APPDir
+import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -17,4 +19,15 @@ fun copyFile(`in`: InputStream, out: OutputStream) {
     }
     `in`.close()
     out.close()
+}
+
+fun getAppDir(): File {
+    val appDir = File(APPDir)
+    println(appDir.absolutePath)
+    val logDir = File("$APPDir/logs")
+    if (!appDir.exists()){
+        appDir.mkdirs()
+        logDir.mkdirs()
+    }
+    return appDir
 }
