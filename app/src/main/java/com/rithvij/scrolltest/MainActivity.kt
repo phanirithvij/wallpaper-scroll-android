@@ -19,8 +19,10 @@ import androidx.core.content.FileProvider
 import androidx.viewpager.widget.ViewPager
 import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AppCompatActivity
+import com.rithvij.scrolltest.config.APPDir
 import com.rithvij.scrolltest.utils.*
 import com.rithvij.scrolltest.models.*
+import java.text.DateFormat
 
 const val EXTERNAL_ST_PERMISSION = 2423
 
@@ -101,10 +103,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadJsonData(){
-        val data = loadJSONFromAsset(applicationContext, "data.json")
-        val ran = Date().time
+//        val data = loadAssetContent(applicationContext, "data.json")
+        val data = loadFileContent(applicationContext, "$APPDir/data/data.json")
+        val format = DateFormat.getDateInstance()
+        val ran = Date()
+        val text = format.format(ran)
         appendLog(data!!, "data-latest.json", Logmode.Erase)
-        appendLog(ran.toString(), "data-latest.json", Logmode.Append)
+        appendLog(text, "data-latest.json", Logmode.Append)
         val gson = Gson()
         pageModels = mutableListOf()
 

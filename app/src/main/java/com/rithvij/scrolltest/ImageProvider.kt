@@ -61,7 +61,6 @@ class ImageProvider(private val context: Context, private val pageModel: PageMod
         return tempFile
     }
 
-
     private fun createTempFile(context: Context, url: String?): File? {
         val data = Glide.with(context).asFile().load(url).submit()
         val asyncTask = MyAsyncTask(object : AsyncResponse {
