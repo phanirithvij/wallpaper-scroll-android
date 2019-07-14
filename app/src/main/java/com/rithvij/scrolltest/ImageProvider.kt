@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.google.common.io.Files
 import com.rithvij.scrolltest.utils.copyFile
 import com.bumptech.glide.request.FutureTarget
+import com.rithvij.scrolltest.models.PageModel
 
 interface AsyncResponse {
     fun processFinish(output: File?)

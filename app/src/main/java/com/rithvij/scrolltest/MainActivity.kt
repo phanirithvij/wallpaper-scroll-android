@@ -6,6 +6,7 @@ import android.Manifest
 import android.os.Build
 import android.os.Bundle
 import java.io.IOException
+import android.widget.Toast
 import com.google.gson.Gson
 import android.widget.Button
 import android.graphics.Color
@@ -18,10 +19,9 @@ import androidx.core.content.FileProvider
 import androidx.viewpager.widget.ViewPager
 import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AppCompatActivity
-import com.rithvij.scrolltest.utils.deleteImage
-import com.rithvij.scrolltest.utils.loadJSONFromAsset
-import com.rithvij.scrolltest.utils.getRealPathFromURI
-import com.rithvij.scrolltest.utils.convertFileToContentUri
+import kotlin.random.Random
+import com.rithvij.scrolltest.utils.*
+import com.rithvij.scrolltest.models.*
 
 const val EXTERNAL_ST_PERMISSION = 2423
 
@@ -37,7 +37,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Permission is not granted
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                EXTERNAL_ST_PERMISSION
+            )
+        }
         wallpaperManager = WallpaperManager.getInstance(applicationContext)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.statusBarColor = Color.TRANSPARENT
@@ -54,38 +63,6 @@ class MainActivity : AppCompatActivity() {
 
         dock.setOnClickListener {
             requestPermissions()
-            val path = filesDir.absolutePath
-            println(path)
-            try {
-//                https://stackoverflow.com/a/32038517/8608146
-//                val inputStream = resources.openRawResource(+ R.drawable.orange)
-
-                val tempFile : File? = ImageProvider(applicationContext, pageModels[currentPage]).getTempFile()
-                println(tempFile!!.path)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    val content = convertFileToContentUri(applicationContext, tempFile)
-                    val myIntent = wallpaperManager.getCropAndSetWallpaperIntent(content)
-//                val myIntent = Intent(Intent.ACTION_VIEW)
-                    myIntent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    val uri = FileProvider.getUriForFile(
-                        this@MainActivity,
-                        BuildConfig.APPLICATION_ID + ".provider",
-                        tempFile
-                    )
-                    myIntent.data = uri
-                    startActivity(myIntent)
-                    cleanUpImage(content)
-                } else {
-                    wallpaperManager.setBitmap(BitmapFactory.decodeFile(tempFile.path))
-                }
-            } catch (e: IOException) {
-                throw RuntimeException("Can't create temp file ", e)
-            }
-
-//            getUriFromResource(applicationContext, pageModels[currentPage].resource)
-//            val file = File(obbDir, "y.png")
-//            val pathx = file.absolutePath // get absolute path
-//            println(pathx)
         }
 
 //        viewPager.setPadding(130, 0, 130, 0) // cool effect
@@ -125,33 +102,36 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadJsonData(){
         val data = loadJSONFromAsset(applicationContext, "data.json")
+        Toast.makeText(this, "Help me ${data!!.length}", Toast.LENGTH_SHORT).show()
+        println(data)
+        val ran = Random(32)
+        appendLog(data, "data${ran.nextInt()}.json", Mode.Append)
         val gson = Gson()
         pageModels = mutableListOf()
 
-        if (data != null) {
-            try {
-                val listData = gson.fromJson(data, Array<JsonPageModel>::class.java)
-                pageModels.addAll(0, listData.map {
-                    var icon : Int? = null
-                    if (it.resource != null){
-                        icon = resources.getIdentifier(
-                            it.resource,
-                            "drawable",
-                            packageName
-                        )
-                    }
-                    return@map PageModel(
-                        it.label,
-                        icon,
-                        it.url
+        try {
+            val listData = gson.fromJson(data, Array<JsonPageModel>::class.java)
+            Toast.makeText(this, "${listData.size}", Toast.LENGTH_SHORT).show()
+            pageModels.addAll(0, listData.map {
+                var icon : Int? = null
+                if (it.resource != null){
+                    icon = resources.getIdentifier(
+                        it.resource,
+                        "drawable",
+                        packageName
                     )
-                })
-            } catch (e: NullPointerException){
-                println("FUCK")
-                e.printStackTrace()
-            }
-        } else {
-            println("Shit it's null $data")
+                }
+//                Toast.makeText(this, "${it.label}", Toast.LENGTH_SHORT).show()
+                appendLog("${it.resource} ${it.label} ${it.url}", "labels.txt", Mode.Append)
+                return@map PageModel(
+                    it.label,
+                    icon,
+                    it.url
+                )
+            })
+        } catch (e: NullPointerException){
+            println("FUCK")
+            e.printStackTrace()
         }
     }
 
@@ -174,6 +154,41 @@ class MainActivity : AppCompatActivity() {
                 arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                 EXTERNAL_ST_PERMISSION
             )
+        } else {
+            val path = filesDir.absolutePath
+            println(path)
+            try {
+//                https://stackoverflow.com/a/32038517/8608146
+//                val inputStream = resources.openRawResource(+ R.drawable.orange)
+
+                val tempFile : File? = ImageProvider(applicationContext, pageModels[currentPage]).getTempFile()
+                println(tempFile!!.path)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    val content = convertFileToContentUri(applicationContext, tempFile)
+                    val myIntent = wallpaperManager.getCropAndSetWallpaperIntent(content)
+//                val myIntent = Intent(Intent.ACTION_VIEW)
+                    myIntent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    val uri = FileProvider.getUriForFile(
+                        this@MainActivity,
+//                        BuildConfig.APPLICATION_ID + ".provider",
+                        applicationContext.packageName + ".provider",
+                        tempFile
+                    )
+                    myIntent.data = uri
+                    startActivity(myIntent)
+                    cleanUpImage(content)
+                } else {
+                    wallpaperManager.setBitmap(BitmapFactory.decodeFile(tempFile.path))
+                }
+            } catch (e: IOException) {
+                throw RuntimeException("Can't create temp file ", e)
+            }
+
+//            getUriFromResource(applicationContext, pageModels[currentPage].resource)
+//            val file = File(obbDir, "y.png")
+//            val pathx = file.absolutePath // get absolute path
+//            println(pathx)
+
         }
     }
 }

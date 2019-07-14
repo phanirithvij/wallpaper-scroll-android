@@ -19,3 +19,9 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+#https://stackoverflow.com/a/23826357/8608146
+
+-keepattributes Signature
+
+-keep class com.rithvij.scrolltest.models.** { *; }
