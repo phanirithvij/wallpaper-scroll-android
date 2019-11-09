@@ -104,8 +104,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadJsonData() {
-//        val data = loadAssetContent(applicationContext, "data.json")
-        val data = loadFileContent(applicationContext, "$DataDir/data.json")
+        val data = loadAssetContent(applicationContext, "data.json")
+//        val data = loadFileContent(applicationContext, "$DataDir/data.json")
         val format = DateFormat.getDateInstance()
         val ran = Date()
         val text = format.format(ran)

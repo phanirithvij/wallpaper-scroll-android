@@ -58,7 +58,7 @@
         "type" : 2
     },
     {
-        "label": "It is a File /sdcard/X.png",
+        "label": "It is a non-existent File /sdcard/H.png",
         "file": "sdcard/H.png",
         "type" : 2
     }
